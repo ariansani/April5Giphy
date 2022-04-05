@@ -20,44 +20,47 @@ public class Giphy {
     public String getTitle() {
         return title;
     }
+
     public void setTitle(String title) {
         this.title = title;
     }
+
     public String getId() {
         return id;
     }
+
     public void setId(String id) {
         this.id = id;
     }
+
     public String getImageUrl() {
         return imageUrl;
     }
+
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
     }
 
-    public static List<Giphy> create(String json, String width) throws IOException{
+    public static List<Giphy> create(String json, String width) throws IOException {
         List<Giphy> giphyList = new LinkedList<>();
 
-        try(InputStream is = new ByteArrayInputStream(json.getBytes(StandardCharsets.UTF_8))){
+        try (InputStream is = new ByteArrayInputStream(json.getBytes(StandardCharsets.UTF_8))) {
             JsonReader r = Json.createReader(is);
             JsonObject o = r.readObject();
             JsonArray a = o.getJsonArray("data");
             a.stream()
-            .map(v -> (JsonObject) v)
-            .forEach((JsonObject v) -> {
-               Giphy giphy = new Giphy();
-                giphy.setId(v.getString("id"));
-                giphy.setTitle(v.getString("title"));
-                giphy.setImageUrl(v.getJsonObject("images").getJsonObject(width).getString("url"));
-                giphyList.add(giphy);
-            });
-            
+                    .map(v -> (JsonObject) v)
+                    .forEach((JsonObject v) -> {
+                        Giphy giphy = new Giphy();
+                        giphy.setId(v.getString("id"));
+                        giphy.setTitle(v.getString("title"));
+                        giphy.setImageUrl(v.getJsonObject("images").getJsonObject(width).getString("url"));
+                        giphyList.add(giphy);
+                    });
+
         }
-
-
 
         return giphyList;
     }
-    
+
 }
