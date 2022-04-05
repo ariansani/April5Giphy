@@ -32,8 +32,86 @@ public class GiphyService {
         hasKey = null != apiKey;
    }
 
+   //overloaded methods
+   public Optional<List<Giphy>> findGiphy(String q, String rating, String width){
 
-    public Optional<List<Giphy>> findGiphy(String q, Integer limit, Integer offset, String rating, String lang){
+        String giphyUrl = UriComponentsBuilder.fromUriString(URL)
+        .queryParam("api_key",apiKey)
+        .queryParam("q", q)
+        .queryParam("rating", rating)
+        .toUriString();
+
+        RequestEntity<Void> req = RequestEntity
+        .get(giphyUrl)
+        .accept(MediaType.APPLICATION_JSON)
+        .build();
+
+        RestTemplate template = new RestTemplate();
+
+        ResponseEntity<String> resp = null;
+
+        try {
+            resp = template.exchange(req, String.class);
+        } catch (Exception e) {
+            //TODO: handle exception
+            e.printStackTrace();
+        }
+        
+        if (resp.getStatusCodeValue()>=400){
+            return Optional.empty();
+        }
+
+        try {
+         
+            List<Giphy> giphy = Giphy.create(resp.getBody(), width);
+            return Optional.of(giphy);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return Optional.empty();
+   }
+
+    //overloaded methods
+    public Optional<List<Giphy>> findGiphy(String q, Integer limit, String width){
+       
+        String giphyUrl = UriComponentsBuilder.fromUriString(URL)
+        .queryParam("api_key",apiKey)
+        .queryParam("q", q)
+        .queryParam("limit",limit)
+        .toUriString();
+
+        RequestEntity<Void> req = RequestEntity
+        .get(giphyUrl)
+        .accept(MediaType.APPLICATION_JSON)
+        .build();
+
+        RestTemplate template = new RestTemplate();
+
+        ResponseEntity<String> resp = null;
+
+        try {
+            resp = template.exchange(req, String.class);
+        } catch (Exception e) {
+            //TODO: handle exception
+            e.printStackTrace();
+        }
+        
+        if (resp.getStatusCodeValue()>=400){
+            return Optional.empty();
+        }
+
+        try {
+         
+            List<Giphy> giphy = Giphy.create(resp.getBody(), width);
+            return Optional.of(giphy);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return Optional.empty();
+   }
+
+
+    public Optional<List<Giphy>> findGiphy(String q, Integer limit, Integer offset, String rating, String lang,String width){
 
         String giphyUrl = UriComponentsBuilder.fromUriString(URL)
         .queryParam("api_key",apiKey)
@@ -66,7 +144,7 @@ public class GiphyService {
 
         try {
          
-            List<Giphy> giphy = Giphy.create(resp.getBody());
+            List<Giphy> giphy = Giphy.create(resp.getBody(), width);
             return Optional.of(giphy);
         } catch (Exception e) {
             e.printStackTrace();

@@ -27,15 +27,16 @@ public class GiphyController {
         @RequestParam(name="offset", defaultValue = "0") Integer offset,
         @RequestParam(name="rating") String rating,
         @RequestParam(name="lang") String lang,
+        @RequestParam(name="width") String width,
         Model model
     ){
-        Optional <List<Giphy>> giphy = giphySvc.findGiphy(q, limit, offset, rating, lang);
+        Optional <List<Giphy>> giphy = giphySvc.findGiphy(q, limit, offset, rating, lang, width);
 
         if(giphy.isEmpty()){
             return "404";
         }
+
         List<Giphy> validGiphy = giphy.get();
-        System.out.println(">>>>>>>>>"+validGiphy.get(1).getImageUrl().toString());
         model.addAttribute("giphyList",validGiphy);
         return "result";
     }

@@ -36,7 +36,7 @@ public class Giphy {
         this.imageUrl = imageUrl;
     }
 
-    public static List<Giphy> create(String json) throws IOException{
+    public static List<Giphy> create(String json, String width) throws IOException{
         List<Giphy> giphyList = new LinkedList<>();
 
         try(InputStream is = new ByteArrayInputStream(json.getBytes(StandardCharsets.UTF_8))){
@@ -49,7 +49,7 @@ public class Giphy {
                Giphy giphy = new Giphy();
                 giphy.setId(v.getString("id"));
                 giphy.setTitle(v.getString("title"));
-                giphy.setImageUrl(v.getJsonObject("images").getJsonObject("original").getString("url"));
+                giphy.setImageUrl(v.getJsonObject("images").getJsonObject(width).getString("url"));
                 giphyList.add(giphy);
             });
             
