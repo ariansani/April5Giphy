@@ -44,6 +44,6 @@ jobs:
         secret_key : ${{ secrets.secret_key  }}
         space_name : myfirstspace1996
         space_region : sgp1
-        source: target/site/jacoco/index.html
-        out_dir: coverage/${{ github.event.repository.name }}
+        source: target/site/jacoco/
+        out_dir: coverage/${{ github.event.repository.name }}/report
         permission: public-read
